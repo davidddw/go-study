@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/davidddw/go-utils/logger"
+	"github.com/davidddw/go-common/logger"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
 )

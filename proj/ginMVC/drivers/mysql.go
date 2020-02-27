@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/davidddw2017/panzer/proj/ginMVC/configs"
+	"github.com/davidddw/go-study/proj/ginMVC/configs"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
 )

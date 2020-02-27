@@ -3,8 +3,8 @@ package server
 import (
 	"fmt"
 
-	"github.com/davidddw2017/panzer/proj/ginMVC/configs"
-	"github.com/davidddw2017/panzer/proj/ginMVC/routes"
+	"github.com/davidddw/go-study/proj/ginMVC/configs"
+	"github.com/davidddw/go-study/proj/ginMVC/routes"
 	"github.com/gin-gonic/gin"
 	"github.com/go-xorm/xorm"
 )

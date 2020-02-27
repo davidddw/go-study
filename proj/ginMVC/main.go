@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/davidddw2017/panzer/proj/ginMVC/configs"
-	"github.com/davidddw2017/panzer/proj/ginMvc/drivers"
-	"github.com/davidddw2017/panzer/proj/ginMvc/server"
+	"github.com/davidddw/go-study/proj/ginMVC/configs"
+	"github.com/davidddw/go-study/proj/ginMvc/drivers"
+	"github.com/davidddw/go-study/proj/ginMvc/server"
 	"github.com/gin-gonic/gin"
 	"github.com/go-xorm/xorm"
 )

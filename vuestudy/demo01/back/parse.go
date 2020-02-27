@@ -13,7 +13,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/davidddw/go-utils/logger"
+	"github.com/davidddw/go-common/logger"
 )
 
 // News news structure

@@ -40,8 +40,9 @@ github.com/cupcake/rdb v0.0.0-20161107195141-43ba34106c76/go.mod h1:vYwsqCOLxGii
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/davidddw/go-utils v0.0.1 h1:I7DUOZCnbs/wLBQXQNsryrQbLIeWXZDFhMY5Tbwx/Fk=
-github.com/davidddw/go-utils v0.0.1/go.mod h1:gbdN7CFM3nnXWdTwlqV8LIMh7lih9VwInZZexVCRsrM=
+github.com/davidddw/go-common v0.0.2 h1:1w/tg/oKWEcR5IIdlcqHqsLONEKlGQsIlxidbAOWYJI=
+github.com/davidddw/go-common v0.0.2/go.mod h1:tklZgEaRsuIGa7GO31x/WQEcjyUFwTFP6P6zNISTC60=
+github.com/davidddw/go-study v0.0.0-20200227040932-9503cda8f254 h1:XI/5V9h1SPLmYVoT0VpV7c8WaGfrYsHb/9fvC14bnoo=
 github.com/denisenkom/go-mssqldb v0.0.0-20190707035753-2be1aa521ff4/go.mod h1:zAg7JM8CkOJ43xKXIj7eRO9kmWm/TW578qo+oDO6tuM=
 github.com/denisenkom/go-mssqldb v0.0.0-20191124224453-732737034ffd h1:83Wprp6ROGeiHFAP8WJdI2RoxALQYgdllERc3N5N2DM=
 github.com/denisenkom/go-mssqldb v0.0.0-20191124224453-732737034ffd/go.mod h1:xbL0rPBG9cCiLr28tMa8zpbdarY27NDyej4t/EjAShU=

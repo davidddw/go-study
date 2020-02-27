@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/davidddw2017/panzer/proj/ginMVC/models"
+	"github.com/davidddw/go-study/proj/ginMVC/models"
 	"github.com/gin-gonic/gin"
 	"github.com/go-xorm/xorm"
 )

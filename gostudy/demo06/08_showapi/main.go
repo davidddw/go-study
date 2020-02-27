@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/davidddw2017/panzer/gostudy/demo06/08_showapi/showSdk"
+	"github.com/davidddw/go-study/gostudy/demo06/08_showapi/showSdk"
 )
 
 // Result result value

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/davidddw2017/panzer/gostudy/demo06/07_showapi/showSdk/httplib"
+	"github.com/davidddw/go-study/gostudy/demo06/07_showapi/showSdk/httplib"
 )
 
 type NormalReq struct {

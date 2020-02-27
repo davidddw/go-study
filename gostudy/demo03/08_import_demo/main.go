@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/davidddw2017/panzer/gostudy/demo03/08_import_demo/calc"
+	"github.com/davidddw/go-study/gostudy/demo03/08_import_demo/calc"
 )
 
 func main() {

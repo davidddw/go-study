@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/davidddw2017/panzer/gostudy/demo06/07_showapi/showSdk/normalRequest"
+	"github.com/davidddw/go-study/gostudy/demo06/07_showapi/showSdk/normalRequest"
 )
 
 // Result result value

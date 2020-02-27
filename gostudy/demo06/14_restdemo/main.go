@@ -8,7 +8,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/davidddw2017/panzer/gostudy/demo06/14_restdemo/asset"
+	"github.com/davidddw/go-study/gostudy/demo06/14_restdemo/asset"
 
 	assetfs "github.com/elazarl/go-bindata-assetfs"
 	"github.com/gin-gonic/gin"

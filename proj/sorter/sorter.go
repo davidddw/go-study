@@ -9,9 +9,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/davidddw2017/panzer/proj/sorter/algorithms/bubblesort"
-	"github.com/davidddw2017/panzer/proj/sorter/algorithms/qsort"
-	"github.com/davidddw2017/panzer/proj/sorter/algorithms/selectionsort"
+	"github.com/davidddw/go-study/proj/sorter/algorithms/bubblesort"
+	"github.com/davidddw/go-study/proj/sorter/algorithms/qsort"
+	"github.com/davidddw/go-study/proj/sorter/algorithms/selectionsort"
 )
 
 var infile *string = flag.String("i", "infile", "File contains values for sorting")

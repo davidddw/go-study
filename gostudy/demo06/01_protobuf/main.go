@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	score_server "github.com/davidddw2017/panzer/gostudy/demo06/01_protobuf/src_gen"
+	score_server "github.com/davidddw/go-study/gostudy/demo06/01_protobuf/src_gen"
 	"github.com/golang/protobuf/proto"
 )
 

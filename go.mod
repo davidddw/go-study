@@ -1,4 +1,4 @@
-module github.com/davidddw2017/panzer
+module github.com/davidddw/go-study
 
 go 1.14
 

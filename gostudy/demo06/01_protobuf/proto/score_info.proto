@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package score_server;
+
+/** 
+ * @brief base_score_info
+ */
+message base_score_info_t{
+    int32   win_count = 1;                  // 玩家胜局局数
+    int32   lose_count = 2;                 // 玩家负局局数
+    int32   exception_count = 3;            // 玩家异常局局数
+    int32   kill_count = 4;                 // 总人头数
+    int32   death_count = 5;                // 总死亡数
+    int32   assist_count = 6;               // 总总助攻数
+    int64   rating = 7;                     // 评价积分
+}

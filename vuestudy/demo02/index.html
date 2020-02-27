@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <h2>{{message}}</h2>
+        <h2 v-text="message+'!'"></h2>
+        <input type="button" value="v-on指令" v-on:click="doIt"><br>
+        <input type="button" value="v-on指令" @click="doIt">
+        <ul>
+            <li v-for="book in books">{{book.name}}</li>
+        </ul>
+        <input type="text" v-model="name" placeholder="your name">
+        <h1>hello {{name}}</h1>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                message: "hello david",
+                books: [{
+                        name: "book1"
+                    },
+                    {
+                        name: "book2"
+                    },
+                    {
+                        name: "book3"
+                    }
+                ],
+                name: ""
+            },
+            methods: {
+                doIt: function () {
+                    alert("press")
+                    this.message = "press"
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

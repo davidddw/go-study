@@ -1,0 +1,5 @@
+[user]
+	email = tom@zhiming.org
+	name = tom
+[credential]
+	helper = store

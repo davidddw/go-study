@@ -6,7 +6,7 @@ import moment from 'moment'
 Vue.use(Vuex)
 
 Vue.prototype.$http = axios
-axios.defaults.baseURL = 'http://127.0.0.1:8081'
+//axios.defaults.baseURL = 'http://127.0.0.1:8081'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.withCredentials = false

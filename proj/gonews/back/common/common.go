@@ -42,7 +42,7 @@ func InitDataPuller() error {
 	}
 	folderPath, _ := filepath.Abs(dir + "/news")
 	if _, err := os.Stat(folderPath); os.IsNotExist(err) {
-		out, err1 := execute(dir, "git", "clone", "https://github.com/gocn/news.git")
+		out, err1 := execute(dir, "git", "clone", config.SysConfig.Common.Repo)
 		if err1 != nil {
 			logger.Errorf("%s", "clone failed")
 			logger.Errorf("%s", err)

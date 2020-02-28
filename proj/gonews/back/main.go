@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"sync"
 
 	"github.com/davidddw/go-common/logger"
 	"github.com/davidddw/go-study/proj/gonews/back/common"
+	"github.com/davidddw/go-study/proj/gonews/back/config"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
 )
@@ -18,7 +20,7 @@ var lock sync.Mutex
 
 func main() {
 	defer logger.Close()
-	StartServ(":8081")
+	StartServ(fmt.Sprintf(":%d", config.SysConfig.Common.Port))
 }
 
 // StartServ start server at 8080

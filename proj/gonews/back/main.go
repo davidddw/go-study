@@ -25,6 +25,7 @@ func main() {
 
 // StartServ start server at 8080
 func StartServ(port string) {
+	gin.SetMode(config.SysConfig.Common.Mode)
 	r := gin.Default()
 
 	// r.LoadHTMLGlob("dist/*.html")        // 添加入口index.html

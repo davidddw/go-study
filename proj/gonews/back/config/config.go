@@ -15,6 +15,7 @@ type Common struct {
 	DataFolder string `ini:"dataFolder"`
 	Port       int    `ini:"port"`
 	Repo       string `ini:"repo"`
+	Mode       string `ini:"mode"`
 }
 
 type Redis struct {

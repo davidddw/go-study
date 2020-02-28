@@ -126,7 +126,7 @@ func GetPagedNews(pageNum int64, pageSize int64) ([]map[string]string, int64, er
 		}
 	}
 	end := time.Now()
-	logger.Infof("time cost %v\n", end.Sub(start))
+	logger.Infof("get news from redis cost %v", end.Sub(start))
 	return newsList, count, nil
 }
 

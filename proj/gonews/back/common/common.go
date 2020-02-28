@@ -52,7 +52,7 @@ func InitDataPuller() error {
 			logger.Infof("%s", "Success to clone news")
 		}
 	}
-	out, err := execute(dir, "git", "pull", "origin", "master")
+	out, err := execute(folderPath, "git", "pull", "origin", "master")
 	if err != nil {
 		logger.Errorf("%s", "Pull failed")
 		logger.Errorf("%s", err)
@@ -63,7 +63,7 @@ func InitDataPuller() error {
 	}
 
 	// 缓存数据操作
-	files := GetFileList(dir)
+	files := GetFileList(folderPath)
 	for _, file := range files {
 		wg.Add(1)
 		go CacheNews(file)

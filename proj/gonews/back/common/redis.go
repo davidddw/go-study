@@ -1,10 +1,11 @@
 package common
 
 import (
-	"fmt"
+	"strconv"
 	"sync"
 	"time"
 
+	"github.com/davidddw/go-common/logger"
 	"github.com/davidddw/go-study/proj/gonews/back/config"
 	"github.com/go-redis/redis"
 )
@@ -58,7 +59,7 @@ func SetNewsToCache(cache map[string]interface{}) error {
 		key1 = value
 	}
 	if value, ok := cache["id"].(int64); ok {
-		key2 = fmt.Sprintf("%03d", value)
+		key2 = GenerateKey(value, 8)
 		err := client.SAdd(sortedPrefix, key1+key2).Err()
 		if err != nil {
 			return err
@@ -72,6 +73,32 @@ func SetNewsToCache(cache map[string]interface{}) error {
 		return client.HMSet(key2, cache).Err()
 	}
 	return nil
+}
+
+// GenerateKey return string which has 0 prefix
+// for number 25 and length equals 6 => 000025
+func GenerateKey(data int64, length int) string {
+	tmp := strconv.FormatInt(data, 10)
+	prefixCount := length - len(tmp)
+	target := make([]byte, length)
+	for i := 0; i < length; i++ {
+		if i < prefixCount {
+			target[i] = '0'
+		} else {
+			target[i] = tmp[i-prefixCount]
+		}
+	}
+	return string(target)
+}
+
+// ParseData return two strings
+// for string 202002020004 and length equals 8 => 20200202, 0004
+func ParseData(data string, length int) (string, string) {
+	subByte := []byte(data)
+	if len(data) <= length {
+		return "", ""
+	}
+	return string(subByte[:length]), string(subByte[length:])
 }
 
 // 获取新闻
@@ -90,9 +117,7 @@ func GetPagedNews(pageNum int64, pageSize int64) ([]map[string]string, int64, er
 	for i := 0; i < len(sortedKey); i++ {
 		length := len(sortedKey[i])
 		if length != 0 {
-			sByte := []byte(sortedKey[i])
-			key1 := string(sByte[:8])
-			id := string(sByte[length-3:])
+			key1, id := ParseData(sortedKey[i], 8)
 			news, err := GetNewsCache(rootKey + ":" + key1 + ":" + id)
 			if err != nil {
 				continue
@@ -101,7 +126,7 @@ func GetPagedNews(pageNum int64, pageSize int64) ([]map[string]string, int64, er
 		}
 	}
 	end := time.Now()
-	fmt.Printf("cost %v\n", end.Sub(start))
+	logger.Infof("time cost %v\n", end.Sub(start))
 	return newsList, count, nil
 }
 

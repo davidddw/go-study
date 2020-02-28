@@ -28,10 +28,11 @@ func StartServ(port string) {
 	gin.SetMode(config.SysConfig.Common.Mode)
 	r := gin.Default()
 
-	// r.LoadHTMLGlob("dist/*.html")        // 添加入口index.html
-	// r.LoadHTMLFiles("dist/*/*")          // 添加资源路径
-	// r.Static("/static", "./dist/static") // 添加资源路径
-	// r.StaticFile("/", "dist/index.html") //前端接口
+	//r.LoadHTMLGlob("dist/*.html")        // 添加入口index.html
+	//r.LoadHTMLFiles("dist/*/*")          // 添加资源路径
+	r.Static("/static", "./dist/static")             // 添加资源路径
+	r.StaticFile("/", "dist/index.html")             //前端接口
+	r.StaticFile("/favicon.ico", "dist/favicon.ico") //前端接口
 
 	r.Use(Cors())
 

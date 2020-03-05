@@ -7,13 +7,17 @@ import (
 	"sync"
 	"time"
 
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+// BaseEntity base
 type BaseEntity interface {
+	GetID() string
+	SetID(id string)
 }
 
 type MongoClient struct {
@@ -35,7 +39,7 @@ var Mongo *MongoClient
 var cancel context.CancelFunc
 
 const (
-	host = "192.168.1.62"
+	host = "localhost"
 	user = "cloud"
 	pass = "passwd"
 	db   = "mydb"
@@ -45,6 +49,7 @@ func init() {
 	SetConnect(host, user, pass, db)
 }
 
+// SetConnect init connect
 func SetConnect(host, user, pass, db string) {
 	var once sync.Once
 	once.Do(func() {
@@ -66,8 +71,8 @@ func SetConnect(host, user, pass, db string) {
 	})
 }
 
-func (m *MongoClient) Create(collection string, e BaseEntity) (error, string) {
-	var err error
+// Insert insert one record to DB
+func (m *MongoClient) Insert(collection string, e BaseEntity) (s string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			var ok bool
@@ -78,31 +83,34 @@ func (m *MongoClient) Create(collection string, e BaseEntity) (error, string) {
 		}
 	}()
 	collections := m.Client.Database(m.Database).Collection(collection)
+	e.SetID(uuid.New().String())
 	cid, err := collections.InsertOne(m.Ctx, e)
 	if err != nil {
-		return err, ""
+		return
 	}
-	return nil, cid.InsertedID.(primitive.ObjectID).Hex()
-}
-
-func (m *MongoClient) Get(collection string, id string) (err error, e interface{}) {
-	defer func() {
-		if r := recover(); r != nil {
-			var ok bool
-			err, ok = r.(error)
-			if !ok {
-				debug.PrintStack()
-			}
-		}
-	}()
-	collections := m.Client.Database(m.Database).Collection(collection)
-	objID, _ := primitive.ObjectIDFromHex(id)
-	result := collections.FindOne(m.Ctx, bson.M{"_id": objID})
-	result.Decode(&e)
+	s = cid.InsertedID.(primitive.ObjectID).Hex()
 	return
 }
 
-func (m *MongoClient) Count(collection string, filter PageFilter) (err error, c int64) {
+// GetOneByID select one record from DB
+func (m *MongoClient) GetOneByID(collection string, id string, e BaseEntity) (err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			err, ok = r.(error)
+			if !ok {
+				debug.PrintStack()
+			}
+		}
+	}()
+	collections := m.Client.Database(m.Database).Collection(collection)
+	result := collections.FindOne(m.Ctx, bson.M{"id": id})
+	result.Decode(e)
+	return
+}
+
+// Count get count
+func (m *MongoClient) Count(collection string, filter PageFilter) (c int64, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			var ok bool
@@ -122,7 +130,8 @@ func (m *MongoClient) Count(collection string, filter PageFilter) (err error, c 
 	return
 }
 
-func (m *MongoClient) List(collection string, filter PageFilter) (err error, e []interface{}) {
+// GetAllByFilter get all
+func (m *MongoClient) GetAllByFilter(collection string, filter PageFilter, e *[]*Book) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			var ok bool
@@ -141,12 +150,14 @@ func (m *MongoClient) List(collection string, filter PageFilter) (err error, e [
 	cur, err := collections.Find(m.Ctx, filter.Filter, &options.FindOptions{Limit: filter.Limit, Skip: filter.Skip, Sort: bson.M{filter.SortBy: filter.SortMode}})
 	//cur, err := collections.Find(m.Ctx, bson.D{})
 	defer cur.Close(m.Ctx)
-	for cur.Next(m.Ctx) {
-		var result Book
-		cur.Decode(&result)
-		e = append(e, result)
-		//var e interface{}
-		//cur.Decode(&e)
-	}
+	err = cur.All(m.Ctx, e)
+	fmt.Printf("%v\n", e)
+	// for cur.Next(m.Ctx) {
+	// 	var result BaseEntity
+	// 	cur.Decode(&result)
+	// 	e = append(e, result)
+	// 	//var e interface{}
+	// 	//cur.Decode(&e)
+	// }
 	return
 }

@@ -16,7 +16,7 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/godror/godror v0.11.3
 	github.com/golang/protobuf v1.3.3
-	github.com/google/uuid v1.1.1 // indirect
+	github.com/google/uuid v1.1.1
 	github.com/gorilla/sessions v1.2.0 // indirect
 	github.com/jinzhu/gorm v1.9.12
 	github.com/kr/pretty v0.2.0 // indirect
@@ -26,5 +26,5 @@ require (
 	github.com/mitchellh/mapstructure v1.1.2
 	github.com/pkg/errors v0.9.1
 	go.mongodb.org/mongo-driver v1.3.1
-	golang.org/x/crypto v0.0.0-20191205180655-e7c4368fe9dd
+	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073
 )

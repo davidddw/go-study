@@ -39,7 +39,7 @@ var Mongo *MongoClient
 var cancel context.CancelFunc
 
 const (
-	host = "localhost"
+	host = "192.168.1.62"
 	user = "cloud"
 	pass = "passwd"
 	db   = "mydb"
@@ -71,19 +71,19 @@ func SetConnect(host, user, pass, db string) {
 	})
 }
 
-// Insert insert one record to DB
-func (m *MongoClient) Insert(collection string, e BaseEntity) (s string, err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			var ok bool
-			err, ok = r.(error)
-			if !ok {
-				debug.PrintStack()
-			}
+// RecoverDebug if error occur Recover env and PrintStack
+func RecoverDebug() {
+	if r := recover(); r != nil {
+		if _, ok := r.(error); !ok {
+			debug.PrintStack()
 		}
-	}()
+	}
+}
+
+// Create insert one record to DB
+func (m *MongoClient) Create(collection string, e BaseEntity) (s string, err error) {
+	defer RecoverDebug()
 	collections := m.Client.Database(m.Database).Collection(collection)
-	e.SetID(uuid.New().String())
 	cid, err := collections.InsertOne(m.Ctx, e)
 	if err != nil {
 		return
@@ -92,72 +92,108 @@ func (m *MongoClient) Insert(collection string, e BaseEntity) (s string, err err
 	return
 }
 
-// GetOneByID select one record from DB
-func (m *MongoClient) GetOneByID(collection string, id string, e BaseEntity) (err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			var ok bool
-			err, ok = r.(error)
-			if !ok {
-				debug.PrintStack()
-			}
-		}
-	}()
+// Create insert one record to DB
+func (m *MongoClient) CreateMany(collection string, all []interface{}) (s []string, err error) {
+	defer RecoverDebug()
 	collections := m.Client.Database(m.Database).Collection(collection)
-	result := collections.FindOne(m.Ctx, bson.M{"id": id})
-	result.Decode(e)
+	cid, err := collections.InsertMany(m.Ctx, all)
+	if err != nil {
+		return
+	}
+	for _, v := range cid.InsertedIDs {
+		s = append(s, v.(primitive.ObjectID).Hex())
+	}
+	return
+}
+
+// GetOneByID select one record from DB by id
+// id is hex string
+// e is pointer to object
+func (m *MongoClient) GetOneByID(collection string, id string, e BaseEntity) (err error) {
+	defer RecoverDebug()
+	collections := m.Client.Database(m.Database).Collection(collection)
+	objID, _ := primitive.ObjectIDFromHex(id)
+	singleResult := collections.FindOne(m.Ctx, bson.M{"_id": objID})
+	singleResult.Decode(e)
+	return
+}
+
+// GetOneByUUID select one record from DB by UUID
+// id is uuid string, e is pointer to object
+// var o Object
+// GetOneByUUID("book", "82164f43-a04d-4e9f-9cf4-45dc710e3f9c", &o)
+func (m *MongoClient) GetOneByUUID(collection string, id string, e BaseEntity) (err error) {
+	defer RecoverDebug()
+	collections := m.Client.Database(m.Database).Collection(collection)
+	singleResult := collections.FindOne(m.Ctx, bson.M{"id": id})
+	singleResult.Decode(e)
 	return
 }
 
 // Count get count
 func (m *MongoClient) Count(collection string, filter PageFilter) (c int64, err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			var ok bool
-			err, ok = r.(error)
-			if !ok {
-				debug.PrintStack()
-			}
-		}
-	}()
+	defer RecoverDebug()
 	if filter.RegexFiler != nil {
 		for k, v := range filter.RegexFiler {
 			filter.Filter[k] = primitive.Regex{Pattern: v, Options: ""}
 		}
 	}
 	collections := m.Client.Database(m.Database).Collection(collection)
-	c, err = collections.CountDocuments(m.Ctx, filter.Filter, &options.CountOptions{Skip: filter.Skip, Limit: filter.Limit})
+	c, err = collections.CountDocuments(m.Ctx, filter.Filter,
+		&options.CountOptions{Skip: filter.Skip, Limit: filter.Limit})
 	return
 }
 
-// GetAllByFilter get all
-func (m *MongoClient) GetAllByFilter(collection string, filter PageFilter, e *[]*Book) (err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			var ok bool
-			err, ok = r.(error)
-			if !ok {
-				debug.PrintStack()
-			}
-		}
-	}()
+// ListByFilter get all by PageFilter
+// all is pointer to object
+//     var all []Object
+// 	   Mongo.GetAllByFilter("ob", filter, &all)
+func (m *MongoClient) ListByFilter(collection string, filter PageFilter, all interface{}) (err error) {
+	defer RecoverDebug()
 	if filter.RegexFiler != nil {
 		for k, v := range filter.RegexFiler {
 			filter.Filter[k] = primitive.Regex{Pattern: v, Options: ""}
 		}
 	}
 	collections := m.Client.Database(m.Database).Collection(collection)
-	cur, err := collections.Find(m.Ctx, filter.Filter, &options.FindOptions{Limit: filter.Limit, Skip: filter.Skip, Sort: bson.M{filter.SortBy: filter.SortMode}})
-	//cur, err := collections.Find(m.Ctx, bson.D{})
-	defer cur.Close(m.Ctx)
-	err = cur.All(m.Ctx, e)
-	fmt.Printf("%v\n", e)
-	// for cur.Next(m.Ctx) {
-	// 	var result BaseEntity
-	// 	cur.Decode(&result)
-	// 	e = append(e, result)
-	// 	//var e interface{}
-	// 	//cur.Decode(&e)
-	// }
+	cursor, err := collections.Find(m.Ctx, filter.Filter, &options.FindOptions{
+		Limit: filter.Limit,
+		Skip:  filter.Skip,
+		Sort:  bson.M{filter.SortBy: filter.SortMode},
+	})
+	defer cursor.Close(m.Ctx)
+	err = cursor.All(m.Ctx, all)
 	return
+}
+
+// ModifyByID update data
+func (m *MongoClient) ModifyByID(collection string, e BaseEntity) (int64, error) {
+	defer RecoverDebug()
+	collections := m.Client.Database(m.Database).Collection(collection)
+	// collections.UpdateOne
+	// collections.UpdateMany
+	result, err := collections.ReplaceOne(m.Ctx, bson.M{"id": e.GetID()}, e)
+	return result.ModifiedCount, err
+}
+
+// Delete delete
+func (m *MongoClient) Delete(collection, id string) (int64, error) {
+	defer RecoverDebug()
+	collections := m.Client.Database(m.Database).Collection(collection)
+	objID, _ := primitive.ObjectIDFromHex(id)
+	result, err := collections.DeleteOne(m.Ctx, bson.M{"_id": objID})
+	return result.DeletedCount, err
+}
+
+// DeleteManyByRegex delete
+func (m *MongoClient) DeleteMany(collection string, key string, value interface{}) (int64, error) {
+	defer RecoverDebug()
+	collections := m.Client.Database(m.Database).Collection(collection)
+	filter := bson.D{{Key: key, Value: value}}
+	result, err := collections.DeleteMany(m.Ctx, filter)
+	return result.DeletedCount, err
+}
+
+func UUID() string {
+	return uuid.New().String()
 }

@@ -189,7 +189,7 @@ func (m *MongoClient) Delete(collection, id string) (int64, error) {
 func (m *MongoClient) DeleteMany(collection string, key string, value interface{}) (int64, error) {
 	defer RecoverDebug()
 	collections := m.Client.Database(m.Database).Collection(collection)
-	filter := bson.D{{Key: key, Value: value}}
+	filter := bson.D{primitive.E{Key: key, Value: value}}
 	result, err := collections.DeleteMany(m.Ctx, filter)
 	return result.DeletedCount, err
 }

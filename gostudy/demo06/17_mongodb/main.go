@@ -1,7 +1,14 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func main() {
@@ -11,7 +18,58 @@ func main() {
 	//selectOne()
 	//selectAll()
 	//delete()
-	update()
+	//update()
+	custom()
+}
+
+func custom() {
+	var ctx context.Context
+	ctx, cancel = context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	opts := &options.ClientOptions{}
+	opts.SetAuth(options.Credential{
+		AuthMechanism: "SCRAM-SHA-1",
+		AuthSource:    db,
+		Username:      user,
+		Password:      pass,
+	}).ApplyURI(fmt.Sprintf("mongodb://%s:27017", host))
+	client, err := mongo.Connect(ctx, opts)
+	if err != nil {
+		fmt.Println(err)
+	}
+	collections := client.Database(db).Collection("demo")
+	result, err := collections.InsertOne(
+		ctx,
+		bson.D{
+			{Key: "item", Value: "canvas"},
+			{Key: "qty", Value: 100},
+			{Key: "tags", Value: bson.A{"cotton"}},
+			{Key: "size", Value: bson.D{
+				{Key: "h", Value: 28},
+				{Key: "w", Value: 35.5},
+				{Key: "uom", Value: "cm"},
+			}},
+		})
+	if err != nil {
+		return
+	}
+	result, err = collections.InsertOne(
+		ctx,
+		bson.M{
+			"item": "canvas",
+			"qty":  100,
+			"tags": bson.A{"cotton"},
+			"size": bson.M{
+				"h":   28,
+				"w":   35.5,
+				"uom": "cm",
+			},
+		})
+	if err != nil {
+		return
+	}
+	s := result.InsertedID.(primitive.ObjectID).Hex()
+	fmt.Println(s)
 }
 
 func insertOne() {

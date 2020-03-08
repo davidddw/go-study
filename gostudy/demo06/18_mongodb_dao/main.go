@@ -62,6 +62,7 @@ var article1 = Article{
 }
 
 func main() {
+	defer cancel()
 	//articleDao.Insert("", &article)
 	//articleDao.UpdateTypeName("2", "3")
 	articleDao.UpdateArticle("3", "西游记", &article1)

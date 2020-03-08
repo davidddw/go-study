@@ -12,6 +12,7 @@ import (
 var (
 	mongoClient  *mongo.Client
 	mongoContext context.Context
+	cancel       context.CancelFunc
 )
 
 const (
@@ -26,7 +27,7 @@ const (
 )
 
 func init() {
-	mongoContext, _ = context.WithTimeout(context.Background(), 30*time.Second)
+	mongoContext, cancel = context.WithTimeout(context.Background(), 30*time.Second)
 	opts := &options.ClientOptions{}
 	opts.SetAuth(options.Credential{
 		AuthMechanism: "SCRAM-SHA-1",

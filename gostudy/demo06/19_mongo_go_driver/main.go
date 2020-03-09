@@ -29,7 +29,7 @@ type Howie struct {
 func main() {
 	ctx, cancel := getContext()
 	defer cancel()
-	TestMongo(ctx, "mongodb://localhost:27017", "cloud", "passwd", "mydb")
+	TestMongo(ctx, "mongodb://192.168.1.62:27017", "cloud", "passwd", "mydb")
 }
 
 // TestMongo func

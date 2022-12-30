@@ -12,7 +12,7 @@ require (
 	github.com/davidddw/go-common v0.0.2
 	github.com/elazarl/go-bindata-assetfs v1.0.0
 	github.com/gin-gonic/contrib v0.0.0-20191209060500-d6e26eeaa607
-	github.com/gin-gonic/gin v1.5.0
+	github.com/gin-gonic/gin v1.7.0
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/godror/godror v0.11.3
 	github.com/golang/protobuf v1.3.3
@@ -28,6 +28,5 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/pkg/errors v0.9.1
 	go.mongodb.org/mongo-driver v1.3.1
-	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073
-	gopkg.in/yaml.v2 v2.2.7 // indirect
+	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 )
